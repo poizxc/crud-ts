@@ -14,6 +14,7 @@ export class StatusError extends Error{
         return this._userMessage;
     }
 }
+
 export default {
     notFound:(message:string = "Not Found")=>{return new StatusError(404,message) },
     badRequest:(message:string ="Bad Request")=>{return new StatusError(400,message) },
