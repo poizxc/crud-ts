@@ -6,7 +6,6 @@ import { StatusError } from '../helpers/Errors';
 
 export default function(err: any, req: Request, res: Response, next: NextFunction) {
   logger.error(err.stack);
-
   if (err instanceof StatusError) {
     res.status(err.statusCode).send(err.userMessage);
   } else {

@@ -1,28 +1,25 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Application } from 'express';
 import reqID from './middlewares/reqID';
 import requestLogger from './middlewares/requestLogger';
 import reqTime from './middlewares/reqTime';
 import errorHandler from './middlewares/errorHandler';
 import config from './config/config';
+import controlers from './controlers';
 // import errors from './helpers/Errors';
 // import requestValidator from './middlewares/requestValidator';
 // import Joi from '@hapi/joi';
-import asyncRoute from './middlewares/asyncRoute';
+// import asyncRoute from './middlewares/asyncRoute';
+import mongoDB from './providers/mongoDB';
 // Our Express APP config
-const app = express();
+const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+mongoDB({ dbURI: config.mongoDbURI });
 //middlewares
 app.use(reqID, reqTime, requestLogger);
 
 // API Endpoints
-app.get(
-  '/test-route',
-  asyncRoute(async (req: Request, res: Response) => {
-    res.json(':)');
-  }),
-);
+controlers.init(app);
 //error handler
 app.use(errorHandler);
 
