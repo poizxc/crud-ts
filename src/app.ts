@@ -4,9 +4,9 @@ import requestLogger from './middlewares/requestLogger';
 import reqTime from './middlewares/reqTime';
 import errorHandler from './middlewares/errorHandler';
 import config from './config/config';
-import errors from './helpers/Errors';
-import requestValidator from './middlewares/requestValidator';
-import Joi from '@hapi/joi';
+// import errors from './helpers/Errors';
+// import requestValidator from './middlewares/requestValidator';
+// import Joi from '@hapi/joi';
 import asyncRoute from './middlewares/asyncRoute';
 // Our Express APP config
 const app = express();
