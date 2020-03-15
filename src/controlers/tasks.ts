@@ -4,6 +4,7 @@ import TaskModel from '../models/Task.model';
 import requestValidator from '../middlewares/requestValidator';
 import Joi from '@hapi/joi';
 import errors from '../helpers/Errors';
+import cleanObj from '../helpers/cleanObj';
 const tasksRouter = Router();
 
 tasksRouter.get(
@@ -42,7 +43,46 @@ tasksRouter.post(
     res.status(201).send(await task.save(task));
   }),
 );
+tasksRouter.put(
+  '/:id',
+  requestValidator({
+    body: {
+      title: Joi.string().required(),
+      description: Joi.string()
+        .allow('')
+        .required(),
+      status: Joi.string().required(),
+      category: Joi.string().required(),
+    },
+  }),
+  asyncRoute(async (req: Request, res: Response) => {
+    const { title, description, status, category } = req.body;
+    const { id } = req.params;
 
+    res.status(200).send(await TaskModel.replaceOne({ _id: id }, { title, description, status, category }));
+  }),
+);
+tasksRouter.patch(
+  '/:id',
+  requestValidator({
+    body: {
+      title: Joi.string().optional(),
+      description: Joi.string()
+        .allow('')
+        .optional(),
+      status: Joi.string().optional(),
+      category: Joi.string().optional(),
+    },
+  }),
+  asyncRoute(async (req: Request, res: Response) => {
+    const { title, description, status, category } = req.body;
+    const { id } = req.params;
+
+    res
+      .status(200)
+      .send(await TaskModel.updateOne({ _id: id }, { $set: cleanObj({ title, description, status, category }) }));
+  }),
+);
 tasksRouter.delete(
   '/:id([a-f\\d]{24})',
   asyncRoute(async (req: Request, res: Response) => {
